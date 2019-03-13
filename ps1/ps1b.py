@@ -1,8 +1,8 @@
 ###########################
 # 6.0002 Problem Set 1b: Space Change
-# Name:
-# Collaborators:
-# Time:
+# Name: Ruoshui Mao
+# Collaborators: Mr. K
+# Time: 2
 # Author: charz, cdenise
 
 #================================
@@ -22,30 +22,41 @@ def dp_make_weight(egg_weights, target_weight, memo = {}):
     
     Returns: int, smallest number of eggs needed to make target weight
     """
-    if (egg_weights, target_weight) in memo:
-        result  = memo[(egg_weights, target_weight)]
-        
-    elif target_weight == 0:
-        result = 0
-    elif target_weight == 1:
-        result = 1        
-    elif len(egg_weights) == 1:
-        # when only weight 1 eggs are left
-        result = target_weight
-    else:
-        nextItem = egg_weights[len(egg_weights) - 1]
-        nextEggs = egg_weights[:-1]
-        
-        withVal = dp_make_weight(nextEggs, target_weight - nextItem, memo)
-        withVal += 1
-        
-        withoutVal = dp_make_weight(nextEggs, target_weight, memo)
-        
-        result = withVal if withVal < withoutVal else withoutVal
-        
-        memo[(egg_weights, target_weight)] = result
-        return result
-    pass
+    # each index corresponds to the least eggs used for that weight
+    eggs = [0, 1]
+    
+    for i in range(2, target_weight + 1):
+        numEggs = []
+        for w in egg_weights:
+            if len(eggs) >= w:
+                numEggs.append(eggs[i - w] + 1)
+        eggs.append(min(numEggs))
+    return eggs[target_weight]
+    
+##    if (egg_weights, target_weight) in memo:
+##        result  = memo[(egg_weights, target_weight)]
+##        
+##    elif target_weight == 0:
+##        result = 0
+##    elif target_weight == 1:
+##        result = 1        
+##    elif len(egg_weights) == 1:
+##        # when only weight 1 eggs are left
+##        result = target_weight
+##    else:
+##        nextItem = egg_weights[len(egg_weights) - 1]
+##        nextEggs = egg_weights[:-1]
+##        
+##        withVal = dp_make_weight(nextEggs, target_weight - nextItem, memo)
+##        withVal += 1
+##        
+##        withoutVal = dp_make_weight(nextEggs, target_weight, memo)
+##        
+##        result = withVal if withVal < withoutVal else withoutVal
+##        
+##        memo[(egg_weights, target_weight)] = result
+##        return result
+##    pass
 
 # EXAMPLE TESTING CODE, feel free to add more if you'd like
 if __name__ == '__main__':
